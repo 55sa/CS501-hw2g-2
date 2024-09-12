@@ -37,13 +37,9 @@ fun Calculator(){
     Column(modifier=Modifier.fillMaxSize().padding(12.dp)){
         var input1 by remember { mutableStateOf("") }
         var input2 by remember { mutableStateOf("") }
-        var number1 by remember { mutableStateOf(0f) }
-        var number2 by remember { mutableStateOf(0f) }
         var operation by remember { mutableStateOf("")}
         var result by remember { mutableStateOf("0.0") }
-        var msg by remember { mutableStateOf("") }
 
-        // val operation = remember { mutableStateOf("") }
 
         TextField(
             value = input1,
