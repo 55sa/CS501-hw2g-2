@@ -81,8 +81,10 @@ fun MainScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        Text("Welcome to my Temperature Converter!")
+
         if (boxVisible) {
-            Box(modifier = Modifier.size(height = 400.dp, width = 400.dp).background(Color.Gray)
+            Box(modifier = Modifier.size(height = 400.dp, width = 400.dp).background(Color.Yellow)
             ){
                 Column(
                     Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
