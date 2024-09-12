@@ -19,9 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.runtime.*
 import androidx.compose.material3.*
 import androidx.compose.ui.graphics.Color
-
-
-
+import kotlin.math.max
 
 
 class MainActivity : ComponentActivity() {
@@ -36,23 +34,43 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-
-
 @Composable
-fun MainScreen(){
+fun MainScreen() {
     var boxVisible by remember {
         mutableStateOf(true)
     }
 
-    val onClick = {newState: Boolean ->
+    val onClick = { newState: Boolean ->
         boxVisible = newState
+    }
+
+    var celcius by remember { mutableStateOf(0f) }
+    var fahrenheit by remember { mutableStateOf(32f) }
+    var message by remember { mutableStateOf("I wish it was warmer.") }
+
+    fun messageUpdate(celciusVal: Float) {
+        message = if (celciusVal <= 20) {
+            "I wish it was warmer"
+        } else {
+            "I wish it was colder"
+        }
+    }
+
+    fun fahrenheitUpdate(celciusVal: Float) {
+        celcius = celciusVal
+        fahrenheit = celciusVal * 9 / 5 + 32
+        messageUpdate(celciusVal)
+    }
+
+    fun celciusUpdate(fahrenheitVal: Float) {
+        fahrenheit = max(fahrenheitVal, 32f)
+        celcius = (fahrenheit - 32) * 5 / 9
+        messageUpdate(celcius)
     }
 
     Column(
         Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -63,8 +81,34 @@ fun MainScreen(){
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        if(boxVisible){
-            Box(modifier = Modifier.size(height = 400.dp, width = 400.dp).background(Color.Gray))
+        if (boxVisible) {
+            Box(modifier = Modifier.size(height = 400.dp, width = 400.dp).background(Color.Gray)
+            ){
+                Column(
+                    Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Text(text = "Celcius: ${celcius.toInt()} C")
+                    Slider(
+                        value = celcius,
+                        onValueChange = { fahrenheitUpdate(it) },
+                        valueRange = 0f..100f,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = "Fahrenheit: ${fahrenheit.toInt()} F")
+                    Slider(
+                        value = fahrenheit,
+                        onValueChange = { celciusUpdate(it) },
+                        valueRange = 32f..212f,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = message)
+                }
+            }
         }
     }
 }
